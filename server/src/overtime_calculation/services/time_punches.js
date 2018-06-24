@@ -2,16 +2,16 @@ const axios = require('axios');
 const MemoryCache = require('../../common/memory_cache');
 const { getFormattedDate, dateDiff } = require('../../common/date_utils');
 
-const getTimePunches = () => MemoryCache.getCachedData('time_punches', _fetchTimePunches);
 
 const getTimePunchesFromUser = async (user) => {
-  const timePunches = await getTimePunches();
-
+  const timePunches = await _getTimePunches();
   const splittedByDate = _splitTimePunchesByDate(timePunches, user.id);
   const formattedTimePunches = _formatTimePunches(splittedByDate, user);
 
   return formattedTimePunches;
 };
+
+const _getTimePunches = () => MemoryCache.getCachedData('time_punches', _fetchTimePunches);
 
 const _splitTimePunchesByDate = (timePunches, userId) => (
   Object.keys(timePunches).reduce((prev, cur) => {
@@ -48,11 +48,14 @@ const _formatTimePunches = (splittedByDate, user) => {
     response[year][month][week].regularHours += regularHours;
     response[year][month][week].regularWage = parseFloat((response[year][month][week].regularWage + (regularHours * hourlyWage)).toFixed(2));
     response[year][month][week].totalHours += workedHours;
-    response[year][month][week].totalWage = parseFloat((response[year][month][week].totalWage + (regularHours * hourlyWage) + (extraHours * hourlyWage * 1.5)).toFixed(2));
 
     const extraWeeklyHours = response[year][month][week].totalHours > 40 ? response[year][month][week].totalHours - 40 : 0;
     response[year][month][week].extraWeeklyHours = extraWeeklyHours;
-    response[year][month][week].extraWeeklyWage = extraWeeklyHours > 0 ? extraWeeklyHours * user.hourlyWage : 0;
+    const extraWeeklyWage = extraWeeklyHours > 0 ? extraWeeklyHours * user.hourlyWage * 2 : 0;
+    response[year][month][week].extraWeeklyWage = extraWeeklyWage;
+
+    response[year][month][week].totalWage = parseFloat((response[year][month][week].totalWage + (regularHours * hourlyWage) + (extraHours * hourlyWage * 1.5) + extraWeeklyWage).toFixed(2));
+
 
     return response;
   }, {});
@@ -96,6 +99,5 @@ const _fetchTimePunches = async () => {
 };
 
 module.exports = {
-  getTimePunches,
   getTimePunchesFromUser,
 };
