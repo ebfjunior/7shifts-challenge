@@ -1,0 +1,32 @@
+version: '3'
+services:
+  client:
+    image: node:8
+    container_name: 7shifts-client
+    volumes:
+      - "./client:/var/application/current"
+    working_dir: /var/application/current
+    networks:
+      - default-network
+    ports:
+      - 3000:8080
+    depends_on:
+      - server
+    command: npm start
+  server:
+    image: node:8
+    container_name: 7shifts-server
+    volumes:
+      - "./server:/var/application/current"
+    working_dir: /var/application/current
+    networks:
+      - default-network
+    environment:
+      - PORT=3001
+      - USERS_URL=https://shiftstestapi.firebaseio.com/users.json
+    ports:
+      - 3001:3001
+    command: npm run start-dev
+networks:
+  default-network:
+    driver: bridge
