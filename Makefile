@@ -13,7 +13,7 @@ install:
 	docker-compose down
 
 test-unit:
-	docker-compose run 7shifts-server npm run test-unit
+	docker-compose run server npm run test-unit
 
 test-system:
 	docker-compose up -d

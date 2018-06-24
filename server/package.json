@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint .",
-    "test-unit": "jest tests/unit --forceExit",
+    "test-unit": "jest tests/unit --forceExit --detectOpenHandles",
     "test-system": "jest tests/system --forceExit",
     "start": "node src/index.js",
     "start-dev": "nodemon src/index.js"
@@ -22,10 +22,12 @@
   "author": "Edson Júnior",
   "license": "ISC",
   "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "jest": "^23.1.0",
+    "jest-mock-axios": "^2.1.11",
     "nodemon": "^1.17.3",
     "supertest": "^3.0.0"
   },
