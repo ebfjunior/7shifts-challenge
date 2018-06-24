@@ -4,18 +4,13 @@ const { getFormattedDate, dateDiff } = require('../../common/date_utils');
 
 const getTimePunches = () => MemoryCache.getCachedData('time_punches', _fetchTimePunches);
 
-const getTimePunchesFromUser = async (userId) => {
+const getTimePunchesFromUser = async (user) => {
   const timePunches = await getTimePunches();
 
-  try {
-    const splittedByDate = _splitTimePunchesByDate(timePunches, userId);
-    const formattedTimePunches = _formatTimePunches(splittedByDate);
+  const splittedByDate = _splitTimePunchesByDate(timePunches, user.id);
+  const formattedTimePunches = _formatTimePunches(splittedByDate, user);
 
-    return formattedTimePunches;
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
+  return formattedTimePunches;
 };
 
 const _splitTimePunchesByDate = (timePunches, userId) => (
@@ -48,15 +43,18 @@ const _formatTimePunches = (splittedByDate) => {
     const extraHours = workedHours > 8 ? workedHours - 8 : 0;
     if (workedHours > 8) {
       response[year][month][week].extraDailyHours += extraHours;
-      response[year][month][week].extraDailyWage += extraHours * hourlyWage;
+      response[year][month][week].extraDailyWage += extraHours * hourlyWage * 1.5;
     }
+    response[year][month][week].regularHours += regularHours;
+    response[year][month][week].regularWage = parseFloat((response[year][month][week].regularWage + (regularHours * hourlyWage)).toFixed(2));
     response[year][month][week].totalHours += workedHours;
-    response[year][month][week].totalWage += (regularHours * hourlyWage) + (extraHours * hourlyWage * 1.5);
+    response[year][month][week].totalWage = parseFloat((response[year][month][week].totalWage + (regularHours * hourlyWage) + (extraHours * hourlyWage * 1.5)).toFixed(2));
+    response[year][month][week].hourlyWage = hourlyWage;
 
-    // response[year][month][week].extraWeeklyWage = Object.keys(response[year][month][week].entries).reduce((prevEntries, curEntrie) => {
-    //   const currentWorkedHours = response[year][month][week].entries[curEntrie];
-    //   return prevEntries + ((currentWorkedHours - 40) * hourlyWage * 1.5);
-    // }, 0);
+    response[year][month][week].extraWeeklyWage = Object.keys(response[year][month][week].entries).reduce((prevEntries, curEntrie) => {
+      const currentWorkedHours = response[year][month][week].entries[curEntrie];
+      return prevEntries + ((currentWorkedHours - 40) * hourlyWage * 1.5);
+    }, 0);
 
     return response;
   }, {});
@@ -81,6 +79,8 @@ const _initializeData = (initial, current, year, month, week) => {
     entries: {
       [current]: 0,
     },
+    regularHours: 0,
+    regularWage: 0,
     extraDailyHours: 0,
     extraDailyWage: 0,
     extraWeeklyHours: 0,

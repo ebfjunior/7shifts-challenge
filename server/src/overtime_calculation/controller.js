@@ -1,14 +1,14 @@
 const { Router } = require('express');
-const { fetchUsers } = require('./services/users');
-const { getTimePunchesFromUser } = require('./services/time_punches');
+const { getUsersAndTimePunches } = require('./services/users');
 
 const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const users = await getTimePunchesFromUser(517150);
+    const users = await getUsersAndTimePunches();
     res.json(users);
   } catch (err) {
+    console.log('----', err);
     res.send(err);
   }
 });
