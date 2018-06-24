@@ -30,7 +30,7 @@ const _splitTimePunchesByDate = (timePunches, userId) => (
   }, {})
 );
 
-const _formatTimePunches = (splittedByDate) => {
+const _formatTimePunches = (splittedByDate, user) => {
   const dates = Object.keys(splittedByDate);
 
   return dates.reduce((prev, cur) => {
@@ -49,12 +49,10 @@ const _formatTimePunches = (splittedByDate) => {
     response[year][month][week].regularWage = parseFloat((response[year][month][week].regularWage + (regularHours * hourlyWage)).toFixed(2));
     response[year][month][week].totalHours += workedHours;
     response[year][month][week].totalWage = parseFloat((response[year][month][week].totalWage + (regularHours * hourlyWage) + (extraHours * hourlyWage * 1.5)).toFixed(2));
-    response[year][month][week].hourlyWage = hourlyWage;
 
-    response[year][month][week].extraWeeklyWage = Object.keys(response[year][month][week].entries).reduce((prevEntries, curEntrie) => {
-      const currentWorkedHours = response[year][month][week].entries[curEntrie];
-      return prevEntries + ((currentWorkedHours - 40) * hourlyWage * 1.5);
-    }, 0);
+    const extraWeeklyHours = response[year][month][week].totalHours > 40 ? response[year][month][week].totalHours - 40 : 0;
+    response[year][month][week].extraWeeklyHours = extraWeeklyHours;
+    response[year][month][week].extraWeeklyWage = extraWeeklyHours > 0 ? extraWeeklyHours * user.hourlyWage : 0;
 
     return response;
   }, {});
