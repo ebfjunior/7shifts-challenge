@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
     const users = await getUsersAndTimePunches();
     res.json(users);
   } catch (err) {
-    console.log('----', err);
     res.send(err);
   }
 });

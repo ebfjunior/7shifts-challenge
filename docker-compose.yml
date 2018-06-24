@@ -1,18 +1,5 @@
 version: '3'
 services:
-  client:
-    image: node:8
-    container_name: 7shifts-client
-    volumes:
-      - "./client:/var/application/current"
-    working_dir: /var/application/current
-    networks:
-      - default-network
-    ports:
-      - 3000:8080
-    depends_on:
-      - server
-    command: npm start
   server:
     image: node:8
     container_name: 7shifts-server

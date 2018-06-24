@@ -6,7 +6,6 @@
   "scripts": {
     "lint": "eslint .",
     "test-unit": "jest tests/unit --forceExit --detectOpenHandles",
-    "test-system": "jest tests/system --forceExit",
     "start": "node src/index.js",
     "start-dev": "nodemon src/index.js"
   },
