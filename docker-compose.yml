@@ -24,6 +24,7 @@ services:
     environment:
       - PORT=3001
       - USERS_URL=https://shiftstestapi.firebaseio.com/users.json
+      - TIME_PUNCHES_URL=https://shiftstestapi.firebaseio.com/timePunches.json
     ports:
       - 3001:3001
     command: npm run start-dev

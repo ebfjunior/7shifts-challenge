@@ -1,6 +1,9 @@
 const app = require('./app');
 const cluster = require('cluster');
 const os = require('os');
+const MemoryCache = require('./common/memory_cache');
+
+MemoryCache.initialize();
 
 const cpus = os.cpus();
 if (cluster.isMaster) {
