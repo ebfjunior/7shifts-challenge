@@ -24,6 +24,14 @@ make start
 
 And now, your application will be available at `http://localhost:3001/overtime`
 
+## Testing
+
+You can run the test suit entering the following command:
+
+```
+make test-unit
+```
+
 ## Output
 
 For each found user, i have splitted the data between year, month and week to facilitate the access to overtime information.
