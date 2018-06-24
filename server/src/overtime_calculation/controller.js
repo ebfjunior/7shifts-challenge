@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const { fetchUsers } = require('./services/users');
-const { getTimePunches } = require('./services/time_punches');
+const { getTimePunchesFromUser } = require('./services/time_punches');
 
 const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const users = await getTimePunches();
+    const users = await getTimePunchesFromUser(517150);
     res.json(users);
   } catch (err) {
     res.send(err);
