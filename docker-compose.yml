@@ -10,6 +10,7 @@ services:
       - default-network
     environment:
       - PORT=3001
+      - MEMORY_CACHE_HOURS=1
       - USERS_URL=https://shiftstestapi.firebaseio.com/users.json
       - TIME_PUNCHES_URL=https://shiftstestapi.firebaseio.com/timePunches.json
     ports:
