@@ -87,3 +87,9 @@ Where `517147` is the userId, `2017` is the given year, `10` is its month and th
 - I am doing a lot of loops on the data structure to proccess the informations, and it could has a performance issue.
 - I couldn't write a lot of tests because i had a problem with the library which makes a mock of `axios` requests, and i loose so much time there. So i would improve and organize better my tests.
 - I started to build a react environment to delivery the `bonus 1`, but i hadn't time
+
+## Final considerations
+
+There are some things i couldn't tell you at interview because i was nervous, but i would like to say that i also have some experience with devops with AWS, using terraform, ansible, etc.
+
+I also would like to thank you so much for this opportunity!
